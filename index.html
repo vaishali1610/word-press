@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Editor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script src="script.js"></script>
+  <main class="editor" role="main" aria-label="Text editor">
+    
+    <aside class="sidebar" aria-label="Document settings">
+      <div class="header">
+        <div class="logo" aria-hidden="true">WP</div>
+        <h1>WordPress Editor</h1>
+      </div>
+
+      <div class="meta">
+        <label for="title">Title</label>
+        <input id="title" type="text" placeholder="My Assignment Title" data-meta="title">
+
+        <label for="author">Author</label>
+        <input id="author" type="text" placeholder="Author name" data-meta="author">
+
+        <div class="row">
+          <div class="col">
+            <label for="font">Font</label>
+            <select id="font" class="select" data-meta="font">
+              <option value="Georgia">Georgia</option>
+              <option value="Roboto Mono">Roboto</option>
+              <option value="Lexend">Lexend giga</option>
+              <option value="Verdana">Verdana</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="size">Base Size</label>
+            <select id="size" class="select" data-meta="size">
+              <option>14px</option>
+              <option selected>15px</option>
+              <option>16px</option>
+              <option>18px</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="btn" data-action="autosave-toggle">
+            Auto-save
+          </button>
+          <button class="btn" data-action="clear-format">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <div class="file-buttons">
+        <button class="btn" data-action="export-doc">Export .doc</button>
+        <button class="btn" data-action="export-pdf">Export .pdf</button>
+      </div>
+    </aside>
+
+    <section class="workspace" aria-label="Editor workspace">
+      
+      <div class="toolbar">
+        <div class="group">
+          <button class="tool" data-action="bold">Bold</button>
+          <button class="tool" data-action="italic">Italic</button>
+          <button class="tool" data-action="underline">Underline</button>
+          
+          <select class="select" data-action="heading">
+            <option value="p">Paragraph</option>
+            <option value="h1">Heading 1</option>
+            <option value="h2" selected>Heading 2</option>
+            <option value="h3">Heading 3</option>
+          </select>
+
+          <select class="select" data-action="fontSize">
+            <option value="12px">12</option>
+            <option value="14px">14</option>
+            <option value="16px" selected>16</option>
+            <option value="18px">18</option>
+            <option value="20px">20</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <button class="tool" data-action="align-left">Left</button>
+          <button class="tool" data-action="align-center">Center</button>
+          <button class="tool" data-action="align-right">Right</button>
+          <button class="tool" data-action="olist">1.</button>
+          <button class="tool" data-action="ulist">•</button>
+        </div>
+
+        <div class="group">
+          <button class="tool" data-action="link">Link</button>
+          <button class="tool" data-action="image">Image</button>
+        </div>
+      </div>
+
+      <div class="editor-frame">
+        <article class="page">
+          <header class="page-header">
+            <div class="title-block">
+              <h2 contenteditable="true" data-placeholder="Document title here...">Assignment: Write your title</h2>
+              <div style="font-size:12px;color:#475569;margin-top:6px;">
+                By <strong contenteditable="true" data-placeholder="Author name">Author</strong> — 
+                <span contenteditable="true" data-placeholder="Date">Sept 28, 2025</span>
+              </div>
+            </div>
+            <div class="word-count">Word count: <strong>0</strong></div>
+          </header>
+
+          <div id="editor" class="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your assignment..."></div>
+        </article>
+      </div>
+
+      <div class="actions">
+        <div class="left-actions">
+          <button class="primary-btn" data-action="preview">Preview</button>
+          <button class="outline-btn" data-action="copy-plain">Copy Plain</button>
+          <button class="outline-btn" data-action="copy-html">Copy HTML</button>
+        </div>
+
+        <div class="right-actions">
+          <button class="btn" data-action="find">Find</button>
+          <button class="btn" data-action="toggle-dark">Dark</button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>
