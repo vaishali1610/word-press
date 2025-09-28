@@ -52,6 +52,7 @@
       <div class="file-buttons">
         <button class="btn" data-action="export-doc">Export .doc</button>
         <button class="btn" data-action="export-pdf">Export .pdf</button>
+              <div class="word-count">Word count: <strong>0</strong></div>
       </div>
     </aside>
 
@@ -82,29 +83,7 @@
             <option value="h1">Heading 1</option>
             <option value="h2" selected>Heading 2</option>
             <option value="h3">Heading 3</option>
-          </select>
-
-          <select class="select" data-action="fontSize" title="Font Size">
-            <option value="12px">12</option>
-            <option value="14px">14</option>
-            <option value="16px" selected>16</option>
-            <option value="18px">18</option>
-            <option value="20px">20</option>
-          </select>
-
-          <button class="tool" data-action="foreColor" title="Text Color">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-            </svg>
-          </button>
-
-          <button class="tool" data-action="hiliteColor" title="Highlight">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="10" width="18" height="10" rx="2"/>
-            </svg>
-          </button>
-
-        
+          </select>  
         </div>
 
         <div class="group">
@@ -159,7 +138,6 @@
                 <span contenteditable="true" data-placeholder="Date">Sept 28, 2025</span>
               </div>
             </div>
-            <div class="word-count">Word count: <strong>0</strong></div>
           </header>
           <div id="editor" class="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your assignment..."></div>
         </article>
@@ -179,7 +157,7 @@
       </div>
     </section>
   </main>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

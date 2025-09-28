@@ -5,6 +5,12 @@ class Editor {
     this.initToolbar();
     this.updateWordCount();
     this.editor.addEventListener("input", () => this.updateWordCount());
+     this.editor.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); 
+        document.execCommand("insertHTML", false, "<br><br>"); 
+      }
+    });
   }
 
   execCommand(command, value = null) {
@@ -63,6 +69,17 @@ document.querySelector("[data-action='heading']").addEventListener("change", e =
       this.execCommand("hiliteColor", e.target.value);
     });
     document.querySelector(".toolbar .group:first-child").appendChild(highlightInput);
+    document.querySelector("[data-action='export-pdf']").addEventListener("click", () => {
+  const content = document.querySelector(".page"); // the editor content
+  const opt = {
+    margin:       5,
+    filename:     'document.pdf',
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  { scale: 3, letterRendering: true, useCORS: true, logging: false },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(content).save();
+});
   }
 }
 
