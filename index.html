@@ -4,13 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <title>Editor</title>
+  <title>WordPress Editor</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script src="script.js"></script>
   <main class="editor" role="main" aria-label="Text editor">
-    
     <aside class="sidebar" aria-label="Document settings">
       <div class="header">
         <div class="logo" aria-hidden="true">WP</div>
@@ -36,22 +34,18 @@
           </div>
           <div class="col">
             <label for="size">Base Size</label>
-            <select id="size" class="select" data-meta="size">
-              <option>14px</option>
-              <option selected>15px</option>
-              <option>16px</option>
-              <option>18px</option>
+            <select id="size" class="select" data-meta="size" data-action="fontSize">
+              <option>10px</option>
+              <option selected>25px</option>
+              <option>30px</option>
+              <option>40px</option>
             </select>
           </div>
         </div>
 
         <div class="buttons">
-          <button class="btn" data-action="autosave-toggle">
-            Auto-save
-          </button>
-          <button class="btn" data-action="clear-format">
-            Clear
-          </button>
+          <button class="btn" data-action="autosave-toggle">Auto-save</button>
+          <button class="btn" data-action="clear-format">Clear</button>
         </div>
       </div>
 
@@ -62,40 +56,96 @@
     </aside>
 
     <section class="workspace" aria-label="Editor workspace">
-      
       <div class="toolbar">
         <div class="group">
-          <button class="tool" data-action="bold">Bold</button>
-          <button class="tool" data-action="italic">Italic</button>
-          <button class="tool" data-action="underline">Underline</button>
-          
-          <select class="select" data-action="heading">
+          <button class="tool" data-action="bold" title="Bold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 4h8a4 4 0 010 8H6z"/>
+              <path d="M6 12h9a4 4 0 010 8H6z"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="italic" title="Italic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="4" x2="10" y2="4"/>
+              <line x1="14" y1="20" x2="5" y2="20"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="underline" title="Underline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 4v6a6 6 0 0012 0V4"/>
+              <line x1="4" y1="20" x2="20" y2="20"/>
+            </svg>
+          </button>
+
+          <select class="select" data-action="heading" title="Heading">
             <option value="p">Paragraph</option>
             <option value="h1">Heading 1</option>
             <option value="h2" selected>Heading 2</option>
             <option value="h3">Heading 3</option>
           </select>
 
-          <select class="select" data-action="fontSize">
+          <select class="select" data-action="fontSize" title="Font Size">
             <option value="12px">12</option>
             <option value="14px">14</option>
             <option value="16px" selected>16</option>
             <option value="18px">18</option>
             <option value="20px">20</option>
           </select>
+
+          <button class="tool" data-action="foreColor" title="Text Color">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </button>
+
+          <button class="tool" data-action="hiliteColor" title="Highlight">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="10" width="18" height="10" rx="2"/>
+            </svg>
+          </button>
+
+        
         </div>
 
         <div class="group">
-          <button class="tool" data-action="align-left">Left</button>
-          <button class="tool" data-action="align-center">Center</button>
-          <button class="tool" data-action="align-right">Right</button>
-          <button class="tool" data-action="olist">1.</button>
-          <button class="tool" data-action="ulist">•</button>
+          <button class="tool" data-action="align-left" title="Align Left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="14" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="align-center" title="Align Center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="6" y1="12" x2="18" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="align-right" title="Align Right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="10" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="olist" title="Ordered List">1.</button>
+          <button class="tool" data-action="ulist" title="Unordered List">•</button>
         </div>
 
         <div class="group">
-          <button class="tool" data-action="link">Link</button>
-          <button class="tool" data-action="image">Image</button>
+          <button class="tool" data-action="link" title="Insert Link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="5 12 12 5 19 12"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="image" title="Insert Image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M21 15l-5-5-4 4-3-3L3 21"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -111,7 +161,6 @@
             </div>
             <div class="word-count">Word count: <strong>0</strong></div>
           </header>
-
           <div id="editor" class="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your assignment..."></div>
         </article>
       </div>
@@ -128,8 +177,9 @@
           <button class="btn" data-action="toggle-dark">Dark</button>
         </div>
       </div>
-
     </section>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
