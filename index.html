@@ -46,13 +46,12 @@
 
         <div class="buttons">
           <button class="btn" data-action="autosave-toggle">Auto-save</button>
-       <button class="tool" data-action="clear-format">Clear</button>
+       <button class="tool btn" data-action="clear-format">Clear</button>
        <button class="tool" data-action="reset-editor">Reset</button>
         </div>
       </div>
 
       <div class="file-buttons">
-        <button class="btn" data-action="export-doc">Export .doc</button>
         <button class="btn" data-action="export-pdf">Export .pdf</button>
               <div class="word-count">Word count: <strong>0</strong></div>
       </div>
@@ -119,6 +118,18 @@
         </div>
 
         <div class="group">
+          <button class="tool" data-action="link" title="Insert Link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="5 12 12 5 19 12"/>
+            </svg>
+          </button>
+          <button class="tool" data-action="image" title="Insert Image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M21 15l-5-5-4 4-3-3L3 21"/>
+            </svg>
+          </button>
           <button class="tool" data-action="link">🔗</button>
         <button class="tool" data-action="image">🖼️</button>
         </div>
@@ -127,6 +138,8 @@
       <div class="editor-frame">
         <article class="page">
           <header class="page-header">
+           
+          </header>
   <div class="title-block">
     <h2 id="page-title">Assignment: Write your title</h2>
     <div style="font-size:12px;color:#475569;margin-top:6px;">
@@ -154,13 +167,14 @@
     </section>
   </main>
   <input type="file" id="image-input" accept="image/*" style="display:none" />
-  <div id="preview-modal">
+   <div id="preview-modal">
   <div class="preview-box">
     <button id="close-preview">✖</button>
     <div id="preview-content"></div>
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <script src="script.js"></script>
 </body>
 </html>
