@@ -4,6 +4,16 @@ class Editor {
     this.wordCount = document.querySelector(".word-count strong");
     this.initToolbar();
     this.updateWordCount();
+  this.titleInput = document.getElementById("title");
+    this.authorInput = document.getElementById("author");
+    this.pageTitle = document.getElementById("page-title");
+    this.pageAuthor = document.getElementById("page-author");
+    this.titleInput.addEventListener("input", () => {
+      this.pageTitle.innerText = this.titleInput.value || "Assignment: Write your title";
+    });
+    this.authorInput.addEventListener("input", () => {
+      this.pageAuthor.innerText = this.authorInput.value || "Author";
+    });
     this.editor.addEventListener("input", () => this.updateWordCount());
      this.editor.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
