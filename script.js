@@ -54,6 +54,16 @@ class Editor {
   }
 
   initToolbar() {
+    document.querySelector("[data-action='toggle-dark']").addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+});
+document.querySelector("[data-action='find']").addEventListener("click", () => {
+    const findText = prompt("Enter text to find:");
+    if (!findText) return;
+    const replaceText = prompt(`Replace "${findText}" with:`);
+    const regex = new RegExp(findText, "g");
+    this.editor.innerHTML = this.editor.innerHTML.replace(regex, replaceText);
+});
     document.querySelectorAll(".tool").forEach(btn => {
       btn.addEventListener("click", () => {
         const action = btn.dataset.action;
@@ -88,11 +98,12 @@ class Editor {
       const tag = e.target.value;
       this.execCommand("formatBlock", tag);
     });
-    document.querySelector("[data-meta='font']").addEventListener("change", e => {
-      const font = e.target.value;
-      this.execCommand("fontName", font);
-    });
-
+    const fontSelect = document.getElementById("font");
+fontSelect.addEventListener("change", () => {
+    const fontName = fontSelect.value;
+    const editor = document.getElementById("editor");
+    editor.style.fontFamily = fontName; 
+});
     const textColorInput = document.createElement("input");
     textColorInput.type = "color";
     textColorInput.title = "Text Color";
@@ -175,6 +186,38 @@ clearSelectedFormatting() {
     if (!this.selectedImage) return;
     this.selectedImage.style.border = "none";
     this.selectedImage = null;
+  }
+   insertTable() {
+    const rows = parseInt(prompt("Number of rows:", "2"));
+    const cols = parseInt(prompt("Number of columns:", "2"));
+    if (!rows || !cols) return;
+    const table = document.createElement("table");
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
+    for (let r = 0; r < rows; r++) {
+      const tr = document.createElement("tr");
+      for (let c = 0; c < cols; c++) {
+        const td = document.createElement("td");
+        td.textContent = " ";
+        td.style.border = "1px solid black";
+        td.style.padding = "5px";
+        tr.appendChild(td);
+      }
+      table.appendChild(tr);
+    }
+    this.editor.appendChild(table);
+  }
+  copyPlainText() {
+    const text = this.editor.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied as plain text!");
+    });
+  }
+  copyHTML() {
+    const html = this.editor.innerHTML;
+    navigator.clipboard.writeText(html).then(() => {
+      alert("Copied as HTML!");
+    });
   }
 
   addLink() {

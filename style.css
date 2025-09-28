@@ -26,6 +26,7 @@ html, body {
 
 .editor {
   max-width: 1200px;
+  height: auto;
   margin: 28px auto;
   padding: 22px;
   border-radius: 20px;
@@ -53,7 +54,9 @@ html, body {
   gap: 12px;
   align-items: center;
 }
-
+.logo .dark-mode {
+  color: white;
+}
 .logo {
   width: 48px;
   height: 48px;
@@ -171,7 +174,7 @@ html, body {
   align-items: center;
   justify-content: center;
   width: 38px;
-  height: 38px;
+  height: 50px;
   padding: 6px;
   border-radius: 10px;
   background: var(--glass-2);
@@ -179,7 +182,6 @@ html, body {
   cursor: pointer;
   font-size: 13px;
   color: var(--muted);
-  transition: all .14s ease;
 }
 
 .tool svg {
@@ -219,8 +221,8 @@ html, body {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  background: #fff;
-  color: #0b1220;
+  color: #fff;
+  background: #0b1220;
   border-radius: 8px;
   box-shadow: 0 8px 40px rgba(2,6,23,0.6);
   padding: 28px 36px;
@@ -274,7 +276,7 @@ html, body {
 }
 
 .outline-btn {
-  padding: 10px 12px;
+  padding: 10px 50px;
   border-radius: 10px;
   border: 1px dashed rgba(255,255,255,0.04);
   color: var(--muted);
@@ -287,6 +289,15 @@ html, body {
   border-color: var(--accent); 
   color: #fff;
   transition: all 0.2s ease;
+}
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .editor {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
 }
 
 @media (max-width:480px){
@@ -303,4 +314,71 @@ html, body {
 
 @media (max-width:980px){
   .editor{ grid-template-columns: 1fr; padding:14px; margin:16px; }
+}
+
+body.light-mode {
+    background-color: transparent;
+    color: #0b1220;
+}
+
+body.light-mode .editor {
+    background-color: #ffffff;
+    color: #0b1220;
+}
+
+body.light-mode .sidebar {
+    background-color: #f0f0f0;
+    color: #0b1220;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+}
+
+body.light-mode .toolbar {
+    background: #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .tool,
+body.light-mode .btn,
+body.light-mode .outline-btn,
+body.light-mode .primary-btn {
+    background-color: #ffffff;
+    color: #0b1220;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .tool:hover,
+body.light-mode .tool.active,
+body.light-mode .btn:hover,
+body.light-mode .outline-btn:hover,
+body.light-mode .primary-btn:hover {
+    background-color: #f0e6ff;
+    color: #ff61e7;
+    border-color: #ff61e7;
+}
+
+body.light-mode .meta {
+    background: #f3f3f3;
+    color: #0b1220;
+}
+
+body.light-mode .meta input,
+body.light-mode .meta select {
+    background-color: #fff;
+    color: #0b1220;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .workspace {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .file-buttons {
+    background-color: #f0f0f0;
+}
+
+body.light-mode .page {
+    background-color: #ffffff;
+    color: #0b1220;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
 }

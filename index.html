@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Lexend&display=swap" rel="stylesheet">
   <title>WordPress Editor</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -28,7 +29,7 @@
             <select id="font" class="select" data-meta="font">
               <option value="Georgia">Georgia</option>
               <option value="Roboto Mono">Roboto</option>
-              <option value="Lexend">Lexend giga</option>
+              <option value="Lexend">Lexend</option>
               <option value="Verdana">Verdana</option>
             </select>
           </div>
@@ -45,7 +46,8 @@
 
         <div class="buttons">
           <button class="btn" data-action="autosave-toggle">Auto-save</button>
-          <button class="btn" data-action="clear-format">Clear</button>
+       <button class="tool" data-action="clear-format">Clear</button>
+       <button class="tool" data-action="reset-editor">Reset</button>
         </div>
       </div>
 
@@ -110,35 +112,29 @@
           </button>
           <button class="tool" data-action="olist" title="Ordered List">1.</button>
           <button class="tool" data-action="ulist" title="Unordered List">•</button>
+          <button class="tool" data-action="insert-table">☐</button>
+<button class="tool" data-action="indent" title="Indent">⇾
+</button>
+<button class="tool" data-action="outdent" title="Outdent">⟸</button>
         </div>
 
         <div class="group">
-          <button class="tool" data-action="link" title="Insert Link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="19" x2="12" y2="5"/>
-              <polyline points="5 12 12 5 19 12"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="image" title="Insert Image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <path d="M21 15l-5-5-4 4-3-3L3 21"/>
-            </svg>
-          </button>
+          <button class="tool" data-action="link">🔗</button>
+        <button class="tool" data-action="image">🖼️</button>
         </div>
       </div>
 
       <div class="editor-frame">
         <article class="page">
           <header class="page-header">
-            <div class="title-block">
-              <h2 contenteditable="true" data-placeholder="Document title here...">Assignment: Write your title</h2>
-              <div style="font-size:12px;color:#475569;margin-top:6px;">
-                By <strong contenteditable="true" data-placeholder="Author name">Author</strong> — 
-                <span contenteditable="true" data-placeholder="Date">Sept 28, 2025</span>
-              </div>
-            </div>
-          </header>
+  <div class="title-block">
+    <h2 id="page-title">Assignment: Write your title</h2>
+    <div style="font-size:12px;color:#475569;margin-top:6px;">
+      By <strong id="page-author">Author</strong> — 
+      <span id="page-date">Sept 28, 2025</span>
+    </div>
+  </div>
+</header>
           <div id="editor" class="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your assignment..."></div>
         </article>
       </div>
@@ -146,17 +142,18 @@
       <div class="actions">
         <div class="left-actions">
           <button class="primary-btn" data-action="preview">Preview</button>
-          <button class="outline-btn" data-action="copy-plain">Copy Plain</button>
-          <button class="outline-btn" data-action="copy-html">Copy HTML</button>
+          <button class="tool outline-btn" data-action="copy-plain">Copy as Plain</button>
+<button class="tool outline-btn" data-action="copy-html">Copy as HTML</button>
         </div>
 
         <div class="right-actions">
-          <button class="btn" data-action="find">Find</button>
-          <button class="btn" data-action="toggle-dark">Dark</button>
+          <button class="btn" data-action="find">Find & Replace</button>
+         <button class="btn" data-action="toggle-dark">Change theme</button>
         </div>
       </div>
     </section>
   </main>
+  <input type="file" id="image-input" accept="image/*" style="display:none" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
