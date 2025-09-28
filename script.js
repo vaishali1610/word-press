@@ -4,10 +4,11 @@ class Editor {
     this.wordCount = document.querySelector(".word-count strong");
     this.initToolbar();
     this.updateWordCount();
-  this.titleInput = document.getElementById("title");
+    this.titleInput = document.getElementById("title");
     this.authorInput = document.getElementById("author");
     this.pageTitle = document.getElementById("page-title");
     this.pageAuthor = document.getElementById("page-author");
+
     this.titleInput.addEventListener("input", () => {
       this.pageTitle.innerText = this.titleInput.value || "Assignment: Write your title";
     });
@@ -15,10 +16,28 @@ class Editor {
       this.pageAuthor.innerText = this.authorInput.value || "Author";
     });
     this.editor.addEventListener("input", () => this.updateWordCount());
-     this.editor.addEventListener("keypress", (e) => {
+    this.editor.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         e.preventDefault(); 
         document.execCommand("insertHTML", false, "<br><br>"); 
+      }
+    });
+    this.imageInput = document.createElement("input");
+    this.imageInput.type = "file";
+    this.imageInput.accept = "image/*";
+    this.imageInput.style.display = "none";
+    document.body.appendChild(this.imageInput);
+    this.imageInput.addEventListener("change", (e) => this.insertImage(e.target.files[0]));
+
+    this.selectedImage = null;
+
+    this.editor.addEventListener("click", (e) => {
+      if (e.target.tagName === "IMG") this.selectImage(e.target);
+      else if (this.selectedImage) this.deselectImage();
+      if (e.target.tagName === "A") {
+        e.preventDefault();
+        const url = e.target.getAttribute("href");
+        if (url) window.open(url, "_blank");
       }
     });
   }
@@ -33,6 +52,7 @@ class Editor {
     const words = text.trim().split(/\s+/).filter(Boolean);
     this.wordCount.innerText = words.length;
   }
+
   initToolbar() {
     document.querySelectorAll(".tool").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -46,32 +66,41 @@ class Editor {
           case "align-right": this.execCommand("justifyRight"); break;
           case "olist": this.execCommand("insertOrderedList"); break;
           case "ulist": this.execCommand("insertUnorderedList"); break;
+          case "image": this.imageInput.click(); break;
+          case "link": this.addLink(); break;
+          case "clear-format": this.clearSelectedFormatting(); break;
+          case "reset-editor":this.editor.innerHTML = "<p></p>"; 
+    this.titleInput.value = "";
+    this.authorInput.value = "";
+    this.pageTitle.innerText = "Assignment: Write your title";
+    this.pageAuthor.innerText = "Author";
+    this.updateWordCount();
         }
       });
     });
 
-document.querySelector("[data-action='fontSize']").addEventListener("change", e => {
-  const px = parseInt(e.target.value); 
-  const size = pxToFontSizeValue(px);  
-  document.execCommand("fontSize", false, size);
-});
-document.querySelector("[data-action='heading']").addEventListener("change", e => {
-      const tag = e.target.value; // e.g., h1, h2, p
+    document.querySelector("[data-action='fontSize']").addEventListener("change", e => {
+      const px = parseInt(e.target.value); 
+      const size = pxToFontSizeValue(px);  
+      document.execCommand("fontSize", false, size);
+    });
+    document.querySelector("[data-action='heading']").addEventListener("change", e => {
+      const tag = e.target.value;
       this.execCommand("formatBlock", tag);
     });
-
- document.querySelector("[data-meta='font']").addEventListener("change", e => {
+    document.querySelector("[data-meta='font']").addEventListener("change", e => {
       const font = e.target.value;
       this.execCommand("fontName", font);
     });
 
- const textColorInput = document.createElement("input");
+    const textColorInput = document.createElement("input");
     textColorInput.type = "color";
     textColorInput.title = "Text Color";
     textColorInput.addEventListener("input", e => {
       this.execCommand("foreColor", e.target.value);
     });
     document.querySelector(".toolbar .group:first-child").appendChild(textColorInput);
+
     const highlightInput = document.createElement("input");
     highlightInput.type = "color";
     highlightInput.title = "Highlight";
@@ -79,23 +108,90 @@ document.querySelector("[data-action='heading']").addEventListener("change", e =
       this.execCommand("hiliteColor", e.target.value);
     });
     document.querySelector(".toolbar .group:first-child").appendChild(highlightInput);
+
     document.querySelector("[data-action='export-pdf']").addEventListener("click", () => {
-  const content = document.querySelector(".page"); // the editor content
-  const opt = {
-    margin:       5,
-    filename:     'document.pdf',
-    image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  { scale: 3, letterRendering: true, useCORS: true, logging: false },
-    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(content).save();
-});
+      const content = document.querySelector(".page");
+      const opt = {
+        margin: 5,
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, letterRendering: true, useCORS: true, logging: false },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(content).save();
+    });
+  }
+clearSelectedFormatting() {
+  const selection = window.getSelection();
+  if (!selection.rangeCount) return;
+
+  if (!selection.isCollapsed) {
+    document.execCommand("removeFormat", false, null);
+    document.execCommand("unlink", false, null);
+    document.execCommand("formatBlock", false, "p");
+  } else {
+    const text = this.editor.innerText; 
+    this.editor.innerHTML = "";
+    const p = document.createElement("p");
+    p.textContent = text;
+    this.editor.appendChild(p);
+  }
+}
+
+  insertImage(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = document.createElement("img");
+      img.src = event.target.result;
+      img.style.maxWidth = "100%";
+      img.style.margin = "10px 0";
+      img.style.cursor = "pointer";
+      img.draggable = false;
+
+      const sel = window.getSelection();
+      if (!sel.rangeCount) this.editor.appendChild(img);
+      else {
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+        range.setStartAfter(img);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    };
+    reader.readAsDataURL(file);
+    this.imageInput.value = "";
+  }
+
+  selectImage(img) {
+    if (this.selectedImage) this.deselectImage();
+    this.selectedImage = img;
+    img.style.border = "2px dashed #ff61e7";
+  }
+
+  deselectImage() {
+    if (!this.selectedImage) return;
+    this.selectedImage.style.border = "none";
+    this.selectedImage = null;
+  }
+
+  addLink() {
+    const selection = window.getSelection();
+    if (selection.isCollapsed) {
+      alert("Please select the text you want to link.");
+      return;
+    }
+    const url = prompt("Enter the URL for the link:", "https://");
+    if (url) {
+      this.execCommand("createLink", url);
+    }
   }
 }
 
 function pxToFontSizeValue(px) {
-  const map = { 1: 10, 2: 13, 3: 16, 4: 18, 5: 24, 6: 32, 7: 48
-  };
+  const map = { 1: 10, 2: 13, 3: 16, 4: 18, 5: 24, 6: 32, 7: 48 };
   let closest = 1;
   let minDiff = Infinity; 
   for (let key in map) {
@@ -107,7 +203,6 @@ function pxToFontSizeValue(px) {
   }
   return closest;
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const editor = new Editor("editor");
