@@ -54,6 +54,28 @@ class Editor {
   }
 
   initToolbar() {
+
+document.querySelector("[data-action='preview']").addEventListener("click", () => {
+    const modal = document.getElementById("preview-modal");
+    const content = document.getElementById("preview-content");
+
+    const title = this.titleInput.value || "Assignment: Write your title";
+    const author = this.authorInput.value || "Author";
+
+    content.innerHTML = `
+      <h2>${title}</h2>
+      <p style="font-size:14px;color:#555;">By ${author}</p>
+      <hr>
+      ${this.editor.innerHTML}
+    `;
+
+    modal.style.display = "flex";
+});
+
+document.getElementById("close-preview").addEventListener("click", () => {
+    document.getElementById("preview-modal").style.display = "none";
+});
+
     document.querySelector("[data-action='toggle-dark']").addEventListener("click", () => {
     document.body.classList.toggle("light-mode");
 });
@@ -98,6 +120,11 @@ document.querySelector("[data-action='find']").addEventListener("click", () => {
       const tag = e.target.value;
       this.execCommand("formatBlock", tag);
     });
+    document.querySelector("[data-meta='font']").addEventListener("change", e => {
+      const font = e.target.value;
+      this.execCommand("fontName", font);
+    });
+
     const fontSelect = document.getElementById("font");
 fontSelect.addEventListener("change", () => {
     const fontName = fontSelect.value;
