@@ -30,6 +30,7 @@ class Editor {
       p.innerHTML = "<br>";
       this.editor.appendChild(p);
     }
+
     this.editor.addEventListener("input", () => this.updateWordCount());
     this.editor.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -47,6 +48,12 @@ class Editor {
         sel.removeAllRanges();
         sel.addRange(range);
       }
+       if ((e.key === "Delete" || e.key === "Backspace") && this.selectedImageWrapper) {
+    e.preventDefault(); 
+    this.selectedImageWrapper.remove();
+    this.selectedImageWrapper = null;
+    this.saveToLocalStorage();
+  }
     });
 
     this.imageInput = document.createElement("input");
@@ -56,16 +63,50 @@ class Editor {
     document.body.appendChild(this.imageInput);
     this.imageInput.addEventListener("change", (e) => this.insertImage(e.target.files[0]));
 
-    this.editor.addEventListener("click", (e) => {
-      if (e.target.tagName === "IMG") this.selectImage(e.target);
-      else if (this.selectedImage) this.deselectImage();
-      if (e.target.tagName === "A") {
-        e.preventDefault();
-        const url = e.target.getAttribute("href");
-        if (url) window.open(url, "_blank");
-      }
-    });
+ this.editor.addEventListener("click", (e) => {
+  if (e.target.matches(".delete-img-btn")) {
+    const wrapper = e.target.closest(".image-wrapper");
+    if (wrapper) {
+      wrapper.remove();
+      this.saveToLocalStorage();
+    }
+    return;
   }
+
+
+  const wrapper = e.target.closest(".image-wrapper");
+  if (wrapper) {
+    this.selectImageWrapper(wrapper);
+    return;
+  }
+
+  if (this.selectedImageWrapper) this.deselectImageWrapper();
+  const a = e.target.closest("a");
+  if (a) {
+    e.preventDefault();
+    const url = a.getAttribute("href");
+    if (url) window.open(url, "_blank");
+  }
+});
+
+  }
+selectImageWrapper(wrapper) {
+  if (this.selectedImageWrapper && this.selectedImageWrapper !== wrapper) {
+    this.deselectImageWrapper();
+  }
+  this.selectedImageWrapper = wrapper;
+  wrapper.classList.add("selected");
+  const btn = wrapper.querySelector(".delete-img-btn");
+  if (btn) btn.style.display = "block";
+}
+
+deselectImageWrapper() {
+  if (!this.selectedImageWrapper) return;
+  this.selectedImageWrapper.classList.remove("selected");
+  const btn = this.selectedImageWrapper.querySelector(".delete-img-btn");
+  if (btn) btn.style.display = "none";
+  this.selectedImageWrapper = null;
+}
 
   execCommand(command, value = null) {
     this.editor.focus();
@@ -126,7 +167,7 @@ class Editor {
       document.getElementById("preview-modal").style.display = "none";
     });
 
-    document.querySelector("[data-action='toggle-dark']").addEventListener("click", () => {
+    document.querySelector("[data-action='toggle-light']").addEventListener("click", () => {
       document.body.classList.toggle("light-mode");
     });
 
@@ -195,7 +236,7 @@ class Editor {
             this.pageTitle.innerText = "Assignment: Write your title";
             this.pageAuthor.innerText = "Author";
             this.updateWordCount();
-            localStorage.removeItem("editorData"); // clear autosave too
+            localStorage.removeItem("editorData"); 
             break;
         }
       });
@@ -225,7 +266,6 @@ class Editor {
     highlightInput.type = "color";
     highlightInput.addEventListener("input", (e) => this.execCommand("hiliteColor", e.target.value));
     document.querySelector(".toolbar .group:first-child").appendChild(highlightInput);
-
     document.querySelector("[data-action='export-pdf']").addEventListener("click", () => {
       const content = document.querySelector(".page");
       const opt = {
@@ -236,6 +276,25 @@ class Editor {
         jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(content).save();
+    });
+    document.querySelector("[data-action='export-doc']").addEventListener("click", () => {
+      const content = document.querySelector(".page").innerHTML;
+      const header = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office'
+              xmlns:w='urn:schemas-microsoft-com:office:word'
+              xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>Export</title></head><body>`;
+      const footer = "</body></html>";
+      const sourceHTML = header + content + footer;
+
+      const blob = new Blob([sourceHTML], { type: "application/msword" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "document.doc";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
   }
 
@@ -249,9 +308,11 @@ class Editor {
     const rows = parseInt(prompt("Number of rows:", "2"));
     const cols = parseInt(prompt("Number of columns:", "2"));
     if (!rows || !cols) return;
+
     const table = document.createElement("table");
     table.style.borderCollapse = "collapse";
     table.style.width = "100%";
+
     for (let r = 0; r < rows; r++) {
       const tr = document.createElement("tr");
       for (let c = 0; c < cols; c++) {
@@ -263,7 +324,16 @@ class Editor {
       }
       table.appendChild(tr);
     }
-    this.editor.appendChild(table);
+
+    const sel = window.getSelection();
+    if (!sel.rangeCount) {
+      this.editor.appendChild(table);
+    } else {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(table);
+    }
+
     this.saveToLocalStorage();
   }
 
@@ -281,31 +351,65 @@ class Editor {
     });
   }
 
-  insertImage(file) {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = document.createElement("img");
-      img.src = event.target.result;
-      img.style.maxWidth = "100%";
-      img.style.cursor = "pointer";
-      img.draggable = false;
-      const sel = window.getSelection();
-      if (!sel.rangeCount) this.editor.appendChild(img);
-      else {
-        const range = sel.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(img);
-        range.setStartAfter(img);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
+insertImage(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "image-wrapper";
+    wrapper.contentEditable = false;
+    wrapper.style.display = "inline-block";
+    wrapper.style.position = "relative";
+    wrapper.style.resize = "both";
+    wrapper.style.overflow = "auto";
+    wrapper.style.width = "300px";   
+    wrapper.style.height = "auto";   
+    wrapper.style.border = "1px dashed #ccc";
+
+    const img = document.createElement("img");
+    img.src = event.target.result;
+    img.style.width = "100%";
+    img.style.height = "100%"; 
+    img.style.display = "block";
+    img.style.pointerEvents = "none"; 
+    wrapper.appendChild(img);
+    const delBtn = document.createElement("button");
+    delBtn.innerText = "✖";
+    delBtn.className = "delete-img-btn";
+    delBtn.style.position = "absolute";
+    delBtn.style.top = "2px";
+    delBtn.style.right = "2px";
+    delBtn.style.background = "red";
+    delBtn.style.color = "white";
+    delBtn.style.border = "none";
+    delBtn.style.borderRadius = "50%";
+    delBtn.style.cursor = "pointer";
+    delBtn.style.padding = "2px 5px";
+    delBtn.style.zIndex = "10";
+    delBtn.addEventListener("click", () => {
+      wrapper.remove();
       this.saveToLocalStorage();
-    };
-    reader.readAsDataURL(file);
-    this.imageInput.value = "";
-  }
+    });
+    wrapper.appendChild(delBtn);
+
+    const sel = window.getSelection();
+    if (!sel.rangeCount) this.editor.appendChild(wrapper);
+    else {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(wrapper);
+      range.setStartAfter(wrapper);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    this.saveToLocalStorage();
+  };
+  reader.readAsDataURL(file);
+  this.imageInput.value = "";
+}
+
+
 
   selectImage(img) {
     if (this.selectedImage) this.deselectImage();
