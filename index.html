@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Lexend&display=swap" rel="stylesheet">
   <title>WordPress Editor</title>
@@ -12,7 +13,6 @@
   <main class="editor editor-container" role="main" aria-label="Text editor">
     <aside class="sidebar" aria-label="Document settings">
       <div class="header">
-        <div class="logo" aria-hidden="true">WP</div>
         <h1>WordPress Editor</h1>
       </div>
 
@@ -47,6 +47,7 @@
         <div class="buttons">
           <button class="btn" data-action="autosave-toggle">Auto-save</button>
           <button class="tool btn" data-action="clear-format">Clear</button>
+          <button class="tool" data-action="page-break">Page Break</button>
           <button class="tool" data-action="reset-editor">Reset</button>
         </div>
       </div>
@@ -74,19 +75,19 @@
         </div>
 
         <div class="group">
-          <button class="tool" data-action="align-left" title="Align Left">⮜</button>
-          <button class="tool" data-action="align-center" title="Align Center">↔</button>
-          <button class="tool" data-action="align-right" title="Align Right">⮞</button>
-          <button class="tool" data-action="olist" title="Ordered List">1.</button>
-          <button class="tool" data-action="ulist" title="Unordered List">•</button>
-          <button class="tool" data-action="table" title="Insert Table">☐</button>
-          <button class="tool" data-action="indent" title="Indent">⇾</button>
-          <button class="tool" data-action="outdent" title="Outdent">⟸</button>
+          <button class="tool" data-action="align-left" title="Align Left">Left</button>
+          <button class="tool" data-action="align-center" title="Align Center">Center</button>
+          <button class="tool" data-action="align-right" title="Align Right">Right</button>
+          <button class="tool" data-action="olist" title="Ordered List">OL</button>
+          <button class="tool" data-action="ulist" title="Unordered List">UL</button>
+          <button class="tool" data-action="table" title="Insert Table">Table</button>
+          <button class="tool" data-action="indent" title="Indent">Indent</button>
+          <button class="tool" data-action="outdent" title="Outdent">Outdent</button>
         </div>
 
         <div class="group">
-          <button class="tool" data-action="link" title="Insert Link">🔗</button>
-          <button class="tool" data-action="image" title="Insert Image">🖼️</button>
+          <button class="tool" data-action="link" title="Insert Link">Link</button>
+          <button class="tool" data-action="image" title="Insert Image">Image</button>
         </div>
       </div>
 
@@ -129,6 +130,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="script.js"></script>
 </body>
 </html>

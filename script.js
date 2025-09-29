@@ -32,29 +32,38 @@ class Editor {
     }
 
     this.editor.addEventListener("input", () => this.updateWordCount());
-    this.editor.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const sel = window.getSelection();
-        if (!sel.rangeCount) return;
-        const range = sel.getRangeAt(0);
-        const br1 = document.createElement("br");
-        const br2 = document.createElement("br");
-        range.deleteContents();
-        range.insertNode(br1);
-        range.insertNode(br2);
-        range.setStartAfter(br2);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-       if ((e.key === "Delete" || e.key === "Backspace") && this.selectedImageWrapper) {
-    e.preventDefault(); 
+   this.editor.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    const container = range.startContainer;
+
+    // Check if inside a list item (<li>)
+    if (container.closest && container.closest("li")) {
+      return; // let default behavior happen (new <li>)
+    }
+
+    // Otherwise → insert double <br>
+    e.preventDefault();
+    const br1 = document.createElement("br");
+    const br2 = document.createElement("br");
+    range.deleteContents();
+    range.insertNode(br1);
+    range.insertNode(br2);
+    range.setStartAfter(br2);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  if ((e.key === "Delete" || e.key === "Backspace") && this.selectedImageWrapper) {
+    e.preventDefault();
     this.selectedImageWrapper.remove();
     this.selectedImageWrapper = null;
     this.saveToLocalStorage();
   }
-    });
+});
 
     this.imageInput = document.createElement("input");
     this.imageInput.type = "file";
@@ -90,6 +99,25 @@ class Editor {
 });
 
   }
+
+  insertPageBreak() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+
+  const range = sel.getRangeAt(0);
+  const pageBreak = document.createElement("div");
+  pageBreak.className = "page-break";
+
+  range.deleteContents();
+  range.insertNode(pageBreak);
+  range.setStartAfter(pageBreak);
+  range.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  this.saveToLocalStorage();
+}
+
 selectImageWrapper(wrapper) {
   if (this.selectedImageWrapper && this.selectedImageWrapper !== wrapper) {
     this.deselectImageWrapper();
@@ -190,6 +218,10 @@ deselectImageWrapper() {
           case "strikeThrough":
             this.execCommand(action);
             break;
+            case "page-break":
+  this.insertPageBreak();
+  break;
+
           case "ulist":
             this.execCommand("insertUnorderedList");
             break;
@@ -355,14 +387,14 @@ deselectImageWrapper() {
   copyPlainText() {
     const text = this.editor.innerText;
     navigator.clipboard.writeText(text).then(() => {
-      alert("Copied as plain text!");
+      showToast("Copied as plain text", "success");
     });
   }
 
   copyHTML() {
     const html = this.editor.innerHTML;
     navigator.clipboard.writeText(html).then(() => {
-      alert("Copied as HTML!");
+            showToast("Copied as plain HTML", "success");
     });
   }
 
@@ -459,6 +491,23 @@ function pxToFontSizeValue(px) {
     }
   }
   return closest;
+}
+function showToast(message, type = "info") {
+  Toastify({
+    text: message,
+    duration: 3000,       
+    close: true,          
+    gravity: "top",     
+    position: "center",    
+    stopOnFocus: true,     
+    style: {
+      background: "#13d630ff",
+      color: "#050505ff",
+      borderRadius: "6px",
+      fontSize: "14px",
+      padding: "8px 16px"
+    }
+  }).showToast();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
