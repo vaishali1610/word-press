@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="editor" role="main" aria-label="Text editor">
+  <main class="editor editor-container" role="main" aria-label="Text editor">
     <aside class="sidebar" aria-label="Document settings">
       <div class="header">
         <div class="logo" aria-hidden="true">WP</div>
@@ -46,39 +46,24 @@
 
         <div class="buttons">
           <button class="btn" data-action="autosave-toggle">Auto-save</button>
-       <button class="tool btn" data-action="clear-format">Clear</button>
-       <button class="tool" data-action="reset-editor">Reset</button>
+          <button class="tool btn" data-action="clear-format">Clear</button>
+          <button class="tool" data-action="reset-editor">Reset</button>
         </div>
       </div>
 
       <div class="file-buttons">
         <button class="btn" data-action="export-pdf">Export .pdf</button>
         <button data-action="export-doc" class="btn">Export as Doc</button>
-              <div class="word-count">Word count: <strong>0</strong></div>
+        <div class="word-count">Word count: <strong>0</strong></div>
       </div>
     </aside>
 
     <section class="workspace" aria-label="Editor workspace">
       <div class="toolbar">
         <div class="group">
-          <button class="tool" data-action="bold" title="Bold">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 4h8a4 4 0 010 8H6z"/>
-              <path d="M6 12h9a4 4 0 010 8H6z"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="italic" title="Italic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="19" y1="4" x2="10" y2="4"/>
-              <line x1="14" y1="20" x2="5" y2="20"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="underline" title="Underline">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 4v6a6 6 0 0012 0V4"/>
-              <line x1="4" y1="20" x2="20" y2="20"/>
-            </svg>
-          </button>
+          <button class="tool" data-action="bold" title="Bold">B</button>
+          <button class="tool" data-action="italic" title="Italic">I</button>
+          <button class="tool" data-action="underline" title="Underline">U</button>
 
           <select class="select" data-action="heading" title="Heading">
             <option value="p">Paragraph</option>
@@ -89,64 +74,32 @@
         </div>
 
         <div class="group">
-          <button class="tool" data-action="align-left" title="Align Left">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="4" y1="12" x2="14" y2="12"/>
-              <line x1="4" y1="18" x2="20" y2="18"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="align-center" title="Align Center">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="6" y1="12" x2="18" y2="12"/>
-              <line x1="4" y1="18" x2="20" y2="18"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="align-right" title="Align Right">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="10" y1="12" x2="20" y2="12"/>
-              <line x1="4" y1="18" x2="20" y2="18"/>
-            </svg>
-          </button>
+          <button class="tool" data-action="align-left" title="Align Left">⮜</button>
+          <button class="tool" data-action="align-center" title="Align Center">↔</button>
+          <button class="tool" data-action="align-right" title="Align Right">⮞</button>
           <button class="tool" data-action="olist" title="Ordered List">1.</button>
           <button class="tool" data-action="ulist" title="Unordered List">•</button>
-          <button class="tool" data-action="insert-table">☐</button>
-<button class="tool" data-action="indent" title="Indent">⇾
-</button>
-<button class="tool" data-action="outdent" title="Outdent">⟸</button>
+          <button class="tool" data-action="table" title="Insert Table">☐</button>
+          <button class="tool" data-action="indent" title="Indent">⇾</button>
+          <button class="tool" data-action="outdent" title="Outdent">⟸</button>
         </div>
 
         <div class="group">
-          <button class="tool" data-action="link" title="Insert Link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="19" x2="12" y2="5"/>
-              <polyline points="5 12 12 5 19 12"/>
-            </svg>
-          </button>
-          <button class="tool" data-action="image" title="Insert Image">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <path d="M21 15l-5-5-4 4-3-3L3 21"/>
-            </svg>
-          </button>
+          <button class="tool" data-action="link" title="Insert Link">🔗</button>
+          <button class="tool" data-action="image" title="Insert Image">🖼️</button>
         </div>
       </div>
 
       <div class="editor-frame">
         <article class="page">
-          <header class="page-header">
-           
-          </header>
-  <div class="title-block">
-    <h2 id="page-title">Assignment: Write your title</h2>
-    <div style="font-size:12px;color:#475569;margin-top:6px;">
-      By <strong id="page-author">Author</strong> — 
-      <span id="page-date">Sept 28, 2025</span>
-    </div>
-  </div>
-</header>
+          <header class="page-header"></header>
+          <div class="title-block">
+            <h2 id="page-title">Assignment: Write your title</h2>
+            <div style="font-size:12px;color:#475569;margin-top:6px;">
+              By <strong id="page-author">Author</strong> — 
+              <span id="page-date">Sept 28, 2025</span>
+            </div>
+          </div>
           <div id="editor" class="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your assignment..."></div>
         </article>
       </div>
@@ -155,25 +108,27 @@
         <div class="left-actions">
           <button class="primary-btn" data-action="preview">Preview</button>
           <button class="tool outline-btn" data-action="copy-plain">Copy as Plain</button>
-<button class="tool outline-btn" data-action="copy-html">Copy as HTML</button>
+          <button class="tool outline-btn" data-action="copy-html">Copy as HTML</button>
         </div>
 
         <div class="right-actions">
           <button class="btn" data-action="find">Find & Replace</button>
-         <button class="btn" data-action="toggle-light">Change theme</button>
+          <button class="btn" data-action="toggle-light">Change theme</button>
         </div>
       </div>
     </section>
   </main>
-  <input type="file" id="image-input" accept="image/*" style="display:none" />
-   <div id="preview-modal">
-  <div class="preview-box">
-    <button id="close-preview">✖</button>
-    <div id="preview-content"></div>
-  </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+  <input type="file" id="image-input" accept="image/*" style="display:none" />
+
+  <div id="preview-modal">
+    <div class="preview-box">
+      <button id="close-preview">✖</button>
+      <div id="preview-content"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
